@@ -11,7 +11,6 @@ export const fetchCurrencies = () => {
   return fetch('https://api.frankfurter.app/currencies')
     .then(checkStatus)
     .then(json)
-    .then((data) => data)
     .catch((error) => {
       console.log(error);
     });

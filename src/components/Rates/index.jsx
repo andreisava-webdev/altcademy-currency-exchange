@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchCurrencies } from '../../lib';
+import { checkStatus, fetchCurrencies, json } from '../../lib';
 import Card from '../Utils/Card';
 import CurrencySelect from '../Utils/CurrencySelect';
 import RatesTable from './RatesTable';
@@ -10,21 +10,58 @@ class Rates extends React.Component {
 
     this.state = {
       currencies: {},
+      rates: {},
+      baseCurrency: '',
     };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  fetchRates() {
+    fetch(`https://api.frankfurter.app/latest?from=${this.state.baseCurrency}`)
+      .then(checkStatus)
+      .then(json)
+      .then((res) => {
+        this.setState({ rates: res });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   componentDidMount() {
     fetchCurrencies().then((res) => {
-      this.setState({ currencies: res });
+      this.setState(
+        { currencies: res, baseCurrency: Object.keys(res)[0] },
+        () => {
+          this.fetchRates();
+        }
+      );
+    });
+  }
+
+  handleChange(event) {
+    this.setState({ baseCurrency: event.target.value }, () => {
+      this.fetchRates();
     });
   }
 
   render() {
     return (
       <Card title="Rates">
-        <CurrencySelect data={this.state.currencies} keyId="rates" />
+        <CurrencySelect
+          data={this.state.currencies}
+          keyId="rates"
+          value={this.state.baseCurrency}
+          onChange={this.handleChange}
+        />
 
-        <RatesTable />
+        {this.state.rates.rates && (
+          <RatesTable
+            data={this.state.rates}
+            currencies={this.state.currencies}
+          />
+        )}
       </Card>
     );
   }
