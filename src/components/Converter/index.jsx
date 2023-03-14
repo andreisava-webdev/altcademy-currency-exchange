@@ -26,7 +26,6 @@ class Converter extends React.Component {
   }
 
   reverseCurrencies() {
-    const temp = this.state.fromCurrency;
     this.setState(
       {
         fromCurrency: this.state.toCurrency,

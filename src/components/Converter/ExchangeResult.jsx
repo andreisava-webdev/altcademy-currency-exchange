@@ -13,13 +13,13 @@ const ExchangeResult = ({ exchangeInfo }) => {
   return (
     <div className="row mt-5">
       <div className="col-12 d-flex flex-column gap-0">
-        <span>
+        <span className="text-success fw-bold">
           {baseValue} {fromCurrencyName} = {convertedValue} {toCurrencyName}
         </span>
-        <span>
+        <span className="text-secondary fw-semibold">
           1 {fromCurrency} = {rate} {toCurrency}
         </span>
-        <span>
+        <span className="text-secondary fw-semibold">
           1 {toCurrency} = {inverseRate} {fromCurrency}
         </span>
       </div>
