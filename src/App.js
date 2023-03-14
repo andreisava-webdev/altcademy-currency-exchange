@@ -1,16 +1,13 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Layout from './components/Layout';
+import Rates from './components/Rates';
 
 function App() {
   return (
     <Router>
       <Layout>
         <Switch>
-          <Route path="/">
-            <div>
-              <h1>Currency Exchange</h1>
-            </div>
-          </Route>
+          <Route path="/" component={Rates} />
         </Switch>
       </Layout>
     </Router>
