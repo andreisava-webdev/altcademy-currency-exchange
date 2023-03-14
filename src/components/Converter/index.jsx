@@ -2,7 +2,6 @@ import React from 'react';
 import { checkStatus, json } from '../../lib';
 import Card from '../Utils/Card';
 import CurrencySelect from '../Utils/CurrencySelect';
-import LoadingSpinner from '../Utils/LoadingSpinner';
 import ExchangeResult from './ExchangeResult';
 import ReverseButton from './ReverseButton';
 
@@ -16,7 +15,6 @@ class Converter extends React.Component {
       baseValue: 1,
       convertedValue: 1,
       rate: 1,
-      isLoading: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -47,19 +45,15 @@ class Converter extends React.Component {
         this.convert();
       });
     } else {
-      this.setState({ isLoading: true });
       fetch(
         `https://api.frankfurter.app/latest?from=${this.state.fromCurrency}&to=${this.state.toCurrency}`
       )
         .then(checkStatus)
         .then(json)
         .then((data) => {
-          this.setState(
-            { rate: data.rates[this.state.toCurrency], isLoading: false },
-            () => {
-              this.convert();
-            }
-          );
+          this.setState({ rate: data.rates[this.state.toCurrency] }, () => {
+            this.convert();
+          });
         })
         .catch((error) => console.log(error));
     }
@@ -76,14 +70,8 @@ class Converter extends React.Component {
   }
 
   render() {
-    const {
-      fromCurrency,
-      toCurrency,
-      baseValue,
-      convertedValue,
-      rate,
-      isLoading,
-    } = this.state;
+    const { fromCurrency, toCurrency, baseValue, convertedValue, rate } =
+      this.state;
     const { currencies } = this.props;
     const fromCurrencyName = currencies[fromCurrency];
     const toCurrencyName = currencies[toCurrency];
@@ -134,11 +122,7 @@ class Converter extends React.Component {
           </div>
         </div>
 
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <ExchangeResult exchangeInfo={exchangeInfo} />
-        )}
+        <ExchangeResult exchangeInfo={exchangeInfo} />
       </Card>
     );
   }
