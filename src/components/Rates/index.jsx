@@ -51,7 +51,11 @@ class Rates extends React.Component {
         />
 
         {this.state.rates.rates && (
-          <RatesTable data={this.state.rates} currencies={currencies} />
+          <RatesTable
+            base={this.state.baseCurrency}
+            data={this.state.rates}
+            currencies={currencies}
+          />
         )}
       </Card>
     );

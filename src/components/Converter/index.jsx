@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { checkStatus, json } from '../../lib';
 import Card from '../Utils/Card';
 import CurrencySelect from '../Utils/CurrencySelect';
@@ -9,9 +10,11 @@ class Converter extends React.Component {
   constructor(props) {
     super(props);
 
+    const params = new URLSearchParams(props.location.search);
+
     this.state = {
-      fromCurrency: 'USD',
-      toCurrency: 'EUR',
+      fromCurrency: params.get('from') || 'USD',
+      toCurrency: params.get('to') || 'EUR',
       baseValue: 1,
       convertedValue: 1,
       rate: 1,
@@ -128,4 +131,4 @@ class Converter extends React.Component {
   }
 }
 
-export default Converter;
+export default withRouter(Converter);

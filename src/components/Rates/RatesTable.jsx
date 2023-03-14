@@ -1,4 +1,6 @@
-const RatesTable = ({ data, currencies }) => {
+import { Link } from 'react-router-dom';
+
+const RatesTable = ({ base, data, currencies }) => {
   return (
     <table className="table mt-3">
       <thead>
@@ -13,7 +15,14 @@ const RatesTable = ({ data, currencies }) => {
             <td>
               {val} ({currencies[val]})
             </td>
-            <td>{data.rates[val]}</td>
+            <td>
+              <Link
+                className="link-primary"
+                to={`/converter?from=${base}&to=${val}`}
+              >
+                {data.rates[val]}
+              </Link>
+            </td>
           </tr>
         ))}
       </tbody>
