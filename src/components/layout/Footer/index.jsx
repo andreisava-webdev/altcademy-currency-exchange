@@ -4,10 +4,10 @@ import FooterLink from './FooterLink';
 const Footer = () => {
   return (
     <footer className="row fixed-bottom bg-secondary p-2 text-light">
-      <div className="d-flex justify-content-between align-items-center">
+      <div className="d-flex justify-content-center align-items-center gap-3">
         <FooterLink
           href="https://andreisava-webdev.github.io/portfolio/"
-          label="Andrei Sava"
+          label="&copy; Andrei Sava"
         />
 
         <div className="d-flex gap-2">
