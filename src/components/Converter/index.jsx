@@ -4,6 +4,7 @@ import Card from '../Utils/Card';
 import CurrencySelect from '../Utils/CurrencySelect';
 import LoadingSpinner from '../Utils/LoadingSpinner';
 import ExchangeResult from './ExchangeResult';
+import ReverseButton from './ReverseButton';
 
 class Converter extends React.Component {
   constructor(props) {
@@ -19,6 +20,22 @@ class Converter extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.reverseCurrencies = this.reverseCurrencies.bind(this);
+    this.convert = this.convert.bind(this);
+    this.fetchRate = this.fetchRate.bind(this);
+  }
+
+  reverseCurrencies() {
+    const temp = this.state.fromCurrency;
+    this.setState(
+      {
+        fromCurrency: this.state.toCurrency,
+        toCurrency: this.state.fromCurrency,
+      },
+      () => {
+        this.fetchRate();
+      }
+    );
   }
 
   convert() {
@@ -85,7 +102,7 @@ class Converter extends React.Component {
     return (
       <Card title="Converter">
         <div className="row">
-          <div className="col-12 col-md mt-2">
+          <div className="col-12 col-md-5 mt-2">
             <CurrencySelect
               name="fromCurrency"
               data={this.props.currencies}
@@ -94,7 +111,10 @@ class Converter extends React.Component {
               onChange={this.handleChange}
             />
           </div>
-          <div className="col-12 col-md mt-2">
+          <div className="col-12 col-md-2 mt-2 d-flex justify-content-center align-items-center">
+            <ReverseButton onClick={this.reverseCurrencies} />
+          </div>
+          <div className="col-12 col-md-5 mt-2">
             <CurrencySelect
               name="toCurrency"
               data={this.props.currencies}
