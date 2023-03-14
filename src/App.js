@@ -1,8 +1,19 @@
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Layout from './components/layout/Layout';
+
 function App() {
   return (
-    <div>
-      <h1>Currency Exchange</h1>
-    </div>
+    <Router>
+      <Layout>
+        <Switch>
+          <Route path="/">
+            <div>
+              <h1>Currency Exchange</h1>
+            </div>
+          </Route>
+        </Switch>
+      </Layout>
+    </Router>
   );
 }
 
