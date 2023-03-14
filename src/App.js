@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Converter from './components/Converter';
 import Layout from './components/Layout';
 import Rates from './components/Rates';
+import LoadingSpinner from './components/Utils/LoadingSpinner';
 import { checkStatus, json } from './lib';
 
 class App extends React.Component {
@@ -26,18 +27,7 @@ class App extends React.Component {
 
   render() {
     if (this.state.isLoading) {
-      return (
-        <div className="container p-5">
-          <div className="row">
-            <div className="col-12 d-flex flex-column align-items-center">
-              <div className="spinner-border">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <h1 className="fs-4">Loading...</h1>
-            </div>
-          </div>
-        </div>
-      );
+      return <LoadingSpinner />;
     }
 
     return (
@@ -47,7 +37,9 @@ class App extends React.Component {
             <Route path="/" exact>
               <Rates currencies={this.state.currencies} />
             </Route>
-            <Route path="/converter" component={Converter} />
+            <Route path="/converter">
+              <Converter currencies={this.state.currencies} />
+            </Route>
           </Switch>
         </Layout>
       </Router>

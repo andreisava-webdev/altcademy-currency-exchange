@@ -10,7 +10,7 @@ class Rates extends React.Component {
 
     this.state = {
       rates: {},
-      baseCurrency: '',
+      baseCurrency: 'EUR',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -29,12 +29,7 @@ class Rates extends React.Component {
   }
 
   componentDidMount() {
-    this.setState(
-      { baseCurrency: Object.keys(this.props.currencies)[0] },
-      () => {
-        this.fetchRates();
-      }
-    );
+    this.fetchRates();
   }
 
   handleChange(event) {

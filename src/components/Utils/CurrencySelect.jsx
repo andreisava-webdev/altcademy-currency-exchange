@@ -1,7 +1,7 @@
-const CurrencySelect = ({ data, keyId, value, onChange }) => {
+const CurrencySelect = ({ data, keyId, value, onChange, name }) => {
   return (
     <select
-      name="baseCurrency"
+      name={name}
       id=""
       className="form-select"
       value={value}
@@ -14,6 +14,10 @@ const CurrencySelect = ({ data, keyId, value, onChange }) => {
       ))}
     </select>
   );
+};
+
+CurrencySelect.defaultProps = {
+  name: 'currency',
 };
 
 export default CurrencySelect;
