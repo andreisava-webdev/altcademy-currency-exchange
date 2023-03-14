@@ -5,6 +5,7 @@ import Card from '../Utils/Card';
 import CurrencySelect from '../Utils/CurrencySelect';
 import ExchangeResult from './ExchangeResult';
 import ReverseButton from './ReverseButton';
+import Chart from 'chart.js';
 
 class Converter extends React.Component {
   constructor(props) {
@@ -19,6 +20,8 @@ class Converter extends React.Component {
       convertedValue: 1,
       rate: 1,
     };
+
+    this.chartRef = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.reverseCurrencies = this.reverseCurrencies.bind(this);
@@ -64,13 +67,64 @@ class Converter extends React.Component {
 
   componentDidMount() {
     this.fetchRate();
+    this.getHistoricalRates(this.state.fromCurrency, this.state.toCurrency);
   }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value }, () => {
       this.fetchRate();
+      this.getHistoricalRates(this.state.fromCurrency, this.state.toCurrency);
     });
   }
+
+  getHistoricalRates = (fromCurrency, toCurrency) => {
+    const endDate = new Date().toISOString().split('T')[0];
+    const startDate = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split('T')[0];
+
+    fetch(
+      `https://api.frankfurter.app/${startDate}..${endDate}?from=${fromCurrency}&to=${toCurrency}`
+    )
+      .then(checkStatus)
+      .then(json)
+      .then((data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        const chartLabels = Object.keys(data.rates);
+        const chartData = Object.values(data.rates).map(
+          (rate) => rate[toCurrency]
+        );
+        const chartLabel = `${fromCurrency}/${toCurrency}`;
+        this.buildChart(chartLabels, chartData, chartLabel);
+      })
+      .catch((error) => console.error(error.message));
+  };
+
+  buildChart = (labels, data, label) => {
+    const chartRef = this.chartRef.current.getContext('2d');
+    if (typeof this.chart !== 'undefined') {
+      this.chart.destroy();
+    }
+    this.chart = new Chart(this.chartRef.current.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: label,
+            data,
+            fill: false,
+            tension: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+      },
+    });
+  };
 
   render() {
     const { fromCurrency, toCurrency, baseValue, convertedValue, rate } =
@@ -126,6 +180,8 @@ class Converter extends React.Component {
         </div>
 
         <ExchangeResult exchangeInfo={exchangeInfo} />
+
+        <canvas ref={this.chartRef} />
       </Card>
     );
   }
