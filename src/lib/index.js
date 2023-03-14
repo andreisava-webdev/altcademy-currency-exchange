@@ -6,12 +6,3 @@ export const checkStatus = (response) => {
 };
 
 export const json = (response) => response.json();
-
-export const fetchCurrencies = () => {
-  return fetch('https://api.frankfurter.app/currencies')
-    .then(checkStatus)
-    .then(json)
-    .catch((error) => {
-      console.log(error);
-    });
-};

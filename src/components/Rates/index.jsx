@@ -1,5 +1,5 @@
 import React from 'react';
-import { checkStatus, fetchCurrencies, json } from '../../lib';
+import { checkStatus, json } from '../../lib';
 import Card from '../Utils/Card';
 import CurrencySelect from '../Utils/CurrencySelect';
 import RatesTable from './RatesTable';
@@ -9,7 +9,6 @@ class Rates extends React.Component {
     super(props);
 
     this.state = {
-      currencies: {},
       rates: {},
       baseCurrency: '',
     };
@@ -30,14 +29,12 @@ class Rates extends React.Component {
   }
 
   componentDidMount() {
-    fetchCurrencies().then((res) => {
-      this.setState(
-        { currencies: res, baseCurrency: Object.keys(res)[0] },
-        () => {
-          this.fetchRates();
-        }
-      );
-    });
+    this.setState(
+      { baseCurrency: Object.keys(this.props.currencies)[0] },
+      () => {
+        this.fetchRates();
+      }
+    );
   }
 
   handleChange(event) {
@@ -47,20 +44,18 @@ class Rates extends React.Component {
   }
 
   render() {
+    const { currencies } = this.props;
     return (
       <Card title="Rates">
         <CurrencySelect
-          data={this.state.currencies}
+          data={currencies}
           keyId="rates"
           value={this.state.baseCurrency}
           onChange={this.handleChange}
         />
 
         {this.state.rates.rates && (
-          <RatesTable
-            data={this.state.rates}
-            currencies={this.state.currencies}
-          />
+          <RatesTable data={this.state.rates} currencies={currencies} />
         )}
       </Card>
     );
