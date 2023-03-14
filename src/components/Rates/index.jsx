@@ -14,6 +14,7 @@ class Rates extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.fetchRates = this.fetchRates.bind(this);
   }
 
   fetchRates() {

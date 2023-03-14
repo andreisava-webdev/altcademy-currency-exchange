@@ -2,7 +2,7 @@ const CurrencySelect = ({ data, keyId, value, onChange, name }) => {
   return (
     <select
       name={name}
-      id=""
+      id={name}
       className="form-select"
       value={value}
       onChange={onChange}
