@@ -2,6 +2,7 @@ import React from 'react';
 import { fetchCurrencies } from '../../lib';
 import Card from '../Utils/Card';
 import CurrencySelect from '../Utils/CurrencySelect';
+import RatesTable from './RatesTable';
 
 class Rates extends React.Component {
   constructor(props) {
@@ -21,11 +22,9 @@ class Rates extends React.Component {
   render() {
     return (
       <Card title="Rates">
-        <div className="row">
-          <div className="col">
-            <CurrencySelect data={this.state.currencies} keyId="rates" />
-          </div>
-        </div>
+        <CurrencySelect data={this.state.currencies} keyId="rates" />
+
+        <RatesTable />
       </Card>
     );
   }
